@@ -3,8 +3,7 @@ package commons;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import javax.management.RuntimeErrorException;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -14,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -27,9 +27,7 @@ import pageObjects.nopCommerce.user.MyProductReviewPageObject;
 import pageObjects.nopCommerce.user.OrdersPageObject;
 import pageObjects.nopCommerce.user.PageGeneratorManager;
 import pageObjects.nopCommerce.user.RewardPointsPageObject;
-import pageUIs.user.AddressPageUI;
 import pageUIs.user.BasePageUI;
-import pageUIs.user.MyProductReviewPageUI;
 
 public class BasePage {
 	
@@ -69,6 +67,26 @@ public class BasePage {
 		for(Cookie cookie : cookies) {
 			  driver.manage().addCookie(cookie);
 		  }
+	}
+	
+	public void overrideImplicitTimeOut(WebDriver driver, long timeout) {
+		driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+	}
+	
+	public boolean isElementUndisplayed(WebDriver driver, String locator) {
+		overrideImplicitTimeOut(driver, sortTimeout);
+		List<WebElement> listElement= getListWebElements(driver, locator);
+		overrideImplicitTimeOut(driver, longTimeout);
+		if(listElement.size()==0) {
+			System.out.println("Element not in DOM");
+			return true;
+		}else if(listElement.size()>0 && !listElement.get(0).isDisplayed()) {
+			System.out.println("Element in DOM but undisplay");
+			return true;
+		}else {
+			System.out.println("Element in DOM and display");
+			return false;
+		}
 	}
 	
 	public Alert waitForAlertPresence(WebDriver driver) {
@@ -346,6 +364,11 @@ public class BasePage {
 		action.moveToElement(getWebElement(driver, locatorType)).perform();
 	}
 	
+	public void hoverMouseToElement(WebDriver driver, String locatorType, String... dynamicLocator) {
+		Actions action = new Actions(driver);
+		action.moveToElement(getWebElement(driver, getDynamicXpath(locatorType, dynamicLocator))).perform();
+	}
+	
 	public void scrollToBottomPage(WebDriver driver) {
 		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 		jsExecutor.executeScript("window.scrollBy(0,document.body.scrollHeight)");
@@ -392,6 +415,64 @@ public class BasePage {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isJQueryLoadSuccess(WebDriver driver) {
+		WebDriverWait explicitWait =new WebDriverWait(driver, longTimeout);
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+		ExpectedCondition<Boolean> jQueryLoad= new ExpectedCondition<Boolean>() {
+
+			@Override
+			public Boolean apply(WebDriver driver) {
+				// TODO Auto-generated method stub
+				return (Boolean) jsExecutor.executeScript("return (window.jQuery!=null) && (jQuery.active===0);");
+			}
+			
+		};
+		return explicitWait.until(jQueryLoad);
+	}
+	public boolean isjQueryAndPageLoadSuccess(WebDriver driver) {
+		WebDriverWait explicitWait = new WebDriverWait(driver, longTimeout);
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+		ExpectedCondition<Boolean> jQueryLoad= new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				// TODO Auto-generated method stub
+				try {
+					return  ((Long) jsExecutor.executeScript("return jQuery.active;")==0);
+				}catch (Exception e) {
+					return true;
+				}
+			}
+		};
+		ExpectedCondition<Boolean> PageLoadSuccess= new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				// TODO Auto-generated method stub
+				return  (Boolean) jsExecutor.executeScript("return document.readyState").toString().equals("complete");
+			}
+		};
+		return explicitWait.until(jQueryLoad) && explicitWait.until(PageLoadSuccess);
+	}
+	
+	public boolean isLoadPageSuccess(WebDriver driver) {
+		WebDriverWait explicitWait = new WebDriverWait(driver, longTimeout);
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+		ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver arg0) {
+				// TODO Auto-generated method stub
+				return (Boolean) jsExecutor.executeScript("return (window.jQuery != null) && (jQuery.active == 0)");
+			}	
+		};
+		ExpectedCondition<Boolean> jsLoad = new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver arg0) {
+				// TODO Auto-generated method stub
+				return (Boolean) jsExecutor.executeScript("return document.readyState").toString().equals("complete");
+			}	
+		};
+		return explicitWait.until(jQueryLoad) && explicitWait.until(jsLoad);
 	}
 	
 	public void waitForElementVisible(WebDriver driver, String locatorType) {
@@ -554,4 +635,5 @@ public class BasePage {
 		selectItemInDefaultDropdown(driver, BasePageUI.DYNAMIC_DROPDOWN_BY_ID, textItem, dropdownID);
 	}
 	private long longTimeout = 30;
+	private long sortTimeout = 10;
 }

@@ -13,7 +13,7 @@
     <classes>
       <!-- <class name="com.nopcommerce.commons.Common_01_Register_Cookie"/> -->
       <!-- <class name="com.nopcommerce.practice.Level_13_Pattern_Object"/> -->
-      <class name="com.nopcommerce.user.UserSearch"/> 
+      <class name="com.nopcommerce.user.UserSort"/> 
     </classes>
   </test>
   

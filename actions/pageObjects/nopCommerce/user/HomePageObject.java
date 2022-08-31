@@ -45,4 +45,15 @@ public class HomePageObject extends BasePage{
 		waitForClickable(driver, HomePageUI.DYNAMIC_PRODUCT_LINK_IN_FEATURE_BY_TEXT, productText);
 		clickToElement(driver, HomePageUI.DYNAMIC_PRODUCT_LINK_IN_FEATURE_BY_TEXT, productText);
 	}
+	
+	public void hoverToMenuHeaderByText(String categoryName) {
+		waitForElementVisible(driver, HomePageUI.DYNAMIC_HEADER_MENU_BY_TEXT, categoryName);
+		hoverMouseToElement(driver, HomePageUI.DYNAMIC_HEADER_MENU_BY_TEXT, categoryName);
+	}
+	
+	public SortPageObject clickToSubMenuByText(String menuName, String subName) {
+		waitForClickable(driver, HomePageUI.DYNAMIC_SUB_MENU_BY_TEXT, menuName, subName);
+		clickToElement(driver, HomePageUI.DYNAMIC_SUB_MENU_BY_TEXT, menuName, subName);
+		return PageGeneratorManager.getSortPage(driver);
+	}
 }

@@ -54,5 +54,7 @@ public class PageGeneratorManager {
 		return new SearchPageObject(driver);
 	}
 	
-	
+	public static SortPageObject getSortPage(WebDriver driver) {
+		return new SortPageObject(driver);
+	}
 }
