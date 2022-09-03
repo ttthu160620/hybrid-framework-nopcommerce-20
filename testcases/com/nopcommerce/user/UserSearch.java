@@ -1,5 +1,6 @@
 package com.nopcommerce.user;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -15,14 +16,18 @@ public class UserSearch extends BaseTest{
 	WebDriver driver;
 	HomePageObject homePage;
 	SearchPageObject searchPage;
+	utilities.Environment environment;
 	String notExistData, relateProduct, absoluteProduct, advancedProduct, searchTextboxID, searchButtonText;
 	
-	@Parameters("browser")
+	@Parameters({"browser", "environment"})
 	@BeforeClass
-	public void beforeClass(String browserName) {
-		log.info("Pre-Condition 01: Open browser: " + browserName + "and navigate to home page");
-		driver = getBrowserDriver(browserName);
+	public void beforeClass(String browserName, String environmentName) {
+		log.info("Pre-Condition 01: Open Home page");
+		ConfigFactory.setProperty("environment", environmentName);
+		environment = ConfigFactory.create(utilities.Environment.class);
+		driver = getBrowserDriver(browserName, environment.appUrl());
 		homePage = PageGeneratorManager.getHomePage(driver);
+		
 		searchTextboxID = "small-searchterms";
 		searchButtonText = "Search";
 		

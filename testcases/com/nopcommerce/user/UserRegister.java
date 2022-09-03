@@ -1,5 +1,6 @@
 package com.nopcommerce.user;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -18,13 +19,19 @@ public class UserRegister extends BaseTest{
 	HomePageObject homePage;
 	RegisterPageObjects registerPage;
 	DataHelperFaker dataFaker;
+	utilities.Environment environment;
 	String firstNameID, lastNameID, emailID, passwordID, confirmPasswordID;
 	String firstNameMsgID, lastNameMsgID, emailMsgID, passwordMsgID, confirmPasswordMsgID;
 	String invalidEmail, email, notFoundEmail, firstName, lastName, invalidPassword, password, invalidConfirmPassword;
-	@Parameters("browser")
+	
+	@Parameters({"browser", "environment"})
 	@BeforeClass
-	public void beforeClass(String browserName) {
-		driver = getBrowserDriver(browserName);
+	public void beforeClass(String browserName, String environmentName) {
+		log.info("Pre-Condition 01: Open Home page");
+		ConfigFactory.setProperty("environment", environmentName);
+		environment = ConfigFactory.create(utilities.Environment.class);
+		driver = getBrowserDriver(browserName, environment.appUrl());
+		
 		homePage = PageGeneratorManager.getHomePage(driver);
 		
 		firstNameID = "FirstName";

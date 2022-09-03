@@ -37,16 +37,17 @@ public class BaseTest {
 	}
 
 	protected WebDriver getBrowserDriver(String browserName) {
-		if(browserName.equals("firefox")) {
+		BrowserList browserList = BrowserList.valueOf(browserName.toUpperCase());
+		if(browserList == BrowserList.FIREFOX) {
 			 WebDriverManager.firefoxdriver().setup();
 			 driver = new FirefoxDriver();
 		}
 		
-		else if (browserName.equals("edge")) {
+		else if (browserList == BrowserList.EDGE) {
 			WebDriverManager.edgedriver().setup();
 			driver = new EdgeDriver();
 		}
-		else if(browserName.equals("chrome")) {
+		else if(browserList == BrowserList.CHROME) {
 			WebDriverManager.chromedriver().setup();
 			driver = new ChromeDriver();
 		}
@@ -57,6 +58,31 @@ public class BaseTest {
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		driver.get("https://demo.nopcommerce.com/");
+		return driver;
+	}
+	
+	protected WebDriver getBrowserDriver(String browserName, String appUrl) {
+		BrowserList browserList = BrowserList.valueOf(browserName.toUpperCase());
+		if(browserList == BrowserList.FIREFOX) {
+			 WebDriverManager.firefoxdriver().setup();
+			 driver = new FirefoxDriver();
+		}
+		
+		else if (browserList == BrowserList.EDGE) {
+			WebDriverManager.edgedriver().setup();
+			driver = new EdgeDriver();
+		}
+		else if(browserList == BrowserList.CHROME) {
+			WebDriverManager.chromedriver().setup();
+			driver = new ChromeDriver();
+		}
+		else {
+			throw new RuntimeException("Browser name invalid");
+		}
+
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().window().maximize();
+		driver.get(appUrl);
 		return driver;
 	}
 	

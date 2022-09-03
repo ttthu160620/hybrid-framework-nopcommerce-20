@@ -1,5 +1,6 @@
 package com.nopcommerce.user;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -20,14 +21,19 @@ public class UserLogin extends BaseTest{
 	RegisterPageObjects registerPage;
 	LoginPageObjects loginPage;
 	DataHelperFaker dataFaker;
+	utilities.Environment environment;
 	String firstName, lastName, email, password, invalidEmail, unregisterEmail, invalidPassword;
 	String emailTextboxID, passwordTextboxID, loginButonText;
 	
-	@Parameters("browser")
+	@Parameters({"browser", "environment"})
 	@BeforeClass
-	public void beforeClass(String browserName) {
-		driver = getBrowserDriver(browserName);
+	public void beforeClass(String browserName, String environmentName) {
+		log.info("Pre-Condition 01: Open Home page");
+		ConfigFactory.setProperty("environment", environmentName);
+		environment = ConfigFactory.create(utilities.Environment.class);
+		driver = getBrowserDriver(browserName, environment.appUrl());
 		homePage = PageGeneratorManager.getHomePage(driver);
+		
 		emailTextboxID = "Email";
 		passwordTextboxID = "Password";
 		loginButonText = "Log in";

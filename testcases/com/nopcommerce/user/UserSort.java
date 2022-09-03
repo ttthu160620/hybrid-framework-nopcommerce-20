@@ -1,5 +1,6 @@
 package com.nopcommerce.user;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -7,6 +8,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import commons.BaseTest;
+import freemarker.core.Environment;
 import pageObjects.nopCommerce.user.HomePageObject;
 import pageObjects.nopCommerce.user.PageGeneratorManager;
 import pageObjects.nopCommerce.user.SortPageObject;
@@ -15,13 +17,17 @@ public class UserSort extends BaseTest{
 	WebDriver driver;
 	HomePageObject homePage;
 	SortPageObject sortPage;
+	utilities.Environment environment;
 	String sortByDropdownID, displayedDropdownID;
 	
-	@Parameters("browser")
+	@Parameters({"browser", "environment"})
 	@BeforeClass
-	public void beforeClass(String browserName) {
+	public void beforeClass(String browserName, String environmentName) {
 		log.info("Pre-Condition 01: Open Home page");
-		driver = getBrowserDriver(browserName);
+		
+		ConfigFactory.setProperty("environment", environmentName);
+		environment = ConfigFactory.create(utilities.Environment.class);
+		driver = getBrowserDriver(browserName, environment.appUrl());
 		homePage = PageGeneratorManager.getHomePage(driver);
 		
 		sortByDropdownID = "products-orderby";
