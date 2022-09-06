@@ -9,15 +9,20 @@
   	<listener class-name = "org.uncommons.reportng.JUnitXMLReporter"/>
   </listeners>
   
-  <parameter name = "environment" value = "dev"/>
+  <parameter name = "serverName" value = "testing"/>
+  <parameter name = "envName" value = "local"/>
   
   <test name="Run On Chrome">
   <parameter name = "browser" value = "chrome"/>
-    <classes>
-      <!-- <class name="com.nopcommerce.commons.Common_01_Register_Cookie"/> -->
-      <!-- <class name="com.nopcommerce.practice.Level_13_Pattern_Object"/> -->
-      <class name="com.nopcommerce.user.UserSearch"/> 
-    </classes> 
+    <!-- <classes>
+      <class name="com.nopcommerce.commons.Common_01_Register_Cookie"/>
+      <class name="com.nopcommerce.practice.Level_13_Pattern_Object"/>
+      <class name="com.nopcommerce.practice.Level_14_Selenium_Grid"/> 
+    </classes>  -->
+    <packages>
+    	<package name = "com.nopcommerce.user"></package>
+    </packages>
   </test>
+  
   
 </suite>

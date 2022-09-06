@@ -3,8 +3,8 @@ package utilities;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
 
-@Sources({"classpath:${environment}.properties"})
-public interface Environment extends Config{
+@Sources({"classpath:${serverName}.properties"})
+public interface ServerName extends Config{
 	
 	@Key("appUrl")
 	String appUrl();

@@ -62,15 +62,4 @@ public class Level_12_Custom_Close_Driver extends BaseTest{
   public void Search_04_Search_With_Absolute_Data() {
 	  
   }
-
-  @AfterClass(alwaysRun = true)
-  public void afterClass() {
-	  closeBrowserAndDriver();
-  }
-  
-  public int getRandomNumber() {
-	  Random random = new Random();
-	  return  random.nextInt(999);
-  }
-
 }

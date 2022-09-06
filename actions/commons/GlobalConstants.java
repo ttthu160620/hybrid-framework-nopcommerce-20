@@ -24,4 +24,11 @@ public class GlobalConstants {
 	public static final long LONG_TIMEOUT = 30;
 	public static final long RETRY_TESTCASE_FAIL= 5;
 	
+	public static final String BROWSERSATCK_USERNAME = "thtrn_kXAsdb";
+	public static final String BROWSERSATCK_ACCESS_KEY = "UasaHYzbafhjdn1SS18q";
+	public static final String BROWSERSATCK_URL = "https://" + BROWSERSATCK_USERNAME + ":" + BROWSERSATCK_ACCESS_KEY + "@hub-cloud.browserstack.com/wd/hub";
+	
+	public static final String SAUCELAP_USERNAME = "oauth-minhthu160620-631e3";
+	public static final String SAUCELAP_ACCESS_KEY = "c0e9bd61-13bc-4877-8d1f-96ac46b2b3ee";
+	public static final String  SAUCELAP_URL = "https://" + SAUCELAP_USERNAME +":" + SAUCELAP_ACCESS_KEY + "@ondemand.eu-central-1.saucelabs.com:443/wd/hub";
 }

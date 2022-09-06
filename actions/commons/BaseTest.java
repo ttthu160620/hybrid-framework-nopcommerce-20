@@ -15,7 +15,12 @@ import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Parameters;
 
+import factoryGrid.BrowserStackFactory;
+import factoryGrid.GridLocalFactory;
+import factoryGrid.LocalFactory;
+import factoryGrid.SaucelapFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseTest {
@@ -27,9 +32,10 @@ public class BaseTest {
 		deleteAllurreReportInFolder();
 	}
 	
+	@Parameters("envName")
 	@AfterClass(alwaysRun = true)
-	public void afterClass() {
-		closeBrowserAndDriver();
+	public void afterClass(String envName) {
+		closeBrowserAndDriver(envName);
 	}
 	
 	protected BaseTest() {
@@ -61,25 +67,27 @@ public class BaseTest {
 		return driver;
 	}
 	
-	protected WebDriver getBrowserDriver(String browserName, String appUrl) {
-		BrowserList browserList = BrowserList.valueOf(browserName.toUpperCase());
-		if(browserList == BrowserList.FIREFOX) {
-			 WebDriverManager.firefoxdriver().setup();
-			 driver = new FirefoxDriver();
+	protected WebDriver getBrowserDriver(String browserName, String appUrl, String envName, String ipAddress, String portNumber, String osName, String osVersion) {
+		switch (envName) {
+		case "local": {
+			driver = new LocalFactory(browserName).createDriver();
+			break;
 		}
-		
-		else if (browserList == BrowserList.EDGE) {
-			WebDriverManager.edgedriver().setup();
-			driver = new EdgeDriver();
+		case "gridLocal": {
+			driver = new GridLocalFactory(browserName, ipAddress, portNumber).createDriver();
+			break;			
 		}
-		else if(browserList == BrowserList.CHROME) {
-			WebDriverManager.chromedriver().setup();
-			driver = new ChromeDriver();
+		case "browserStack": {
+			driver = new BrowserStackFactory(browserName, osName, osVersion).createDriver();
+			break;
 		}
-		else {
-			throw new RuntimeException("Browser name invalid");
+		case "saucelap": {
+			driver = new SaucelapFactory(browserName, osName).createDriver();
+			break;
 		}
-
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + envName);
+		}
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		driver.get(appUrl);
@@ -167,63 +175,65 @@ public class BaseTest {
 		}
 	}
 	
-	protected void closeBrowserAndDriver() {
-		String cmd = "";
-		try {
-			String osName = System.getProperty("os.name").toLowerCase();
-			log.info("OS name = " + osName);
-
-			String driverInstanceName = driver.toString().toLowerCase();
-			log.info("Driver instance name = " + driverInstanceName);
-
-			if (driverInstanceName.contains("chrome")) {
-				if (osName.contains("window")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq chromedriver*\"";
-				} else {
-					cmd = "pkill chromedriver";
-				}
-			} else if (driverInstanceName.contains("internetexplorer")) {
-				if (osName.contains("window")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq IEDriverServer*\"";
-				}
-			} else if (driverInstanceName.contains("firefox")) {
-				if (osName.contains("windows")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq geckodriver*\"";
-				} else {
-					cmd = "pkill geckodriver";
-				}
-			} else if (driverInstanceName.contains("edge")) {
-				if (osName.contains("window")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq msedgedriver*\"";
-				} else {
-					cmd = "pkill msedgedriver";
-				}
-			} else if (driverInstanceName.contains("opera")) {
-				if (osName.contains("window")) {
-					cmd = "taskkill /F /FI \"IMAGENAME eq operadriver*\"";
-				} else {
-					cmd = "pkill operadriver";
-				}
-			} else if (driverInstanceName.contains("safari")) {
-				if (osName.contains("mac")) {
-					cmd = "pkill safaridriver";
-				}
-			}
-
-			if (driver != null) {
-				driver.manage().deleteAllCookies();
-				driver.quit();
-			}
-		} catch (Exception e) {
-			log.info(e.getMessage());
-		} finally {
+	protected void closeBrowserAndDriver(String envName) {
+		if(envName.equals("local") || envName.equals("gridLocal")){
+			String cmd = "";
 			try {
-				Process process = Runtime.getRuntime().exec(cmd);
-				process.waitFor();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				String osName = System.getProperty("os.name").toLowerCase();
+				log.info("OS name = " + osName);
+
+				String driverInstanceName = driver.toString().toLowerCase();
+				log.info("Driver instance name = " + driverInstanceName);
+
+				if (driverInstanceName.contains("chrome")) {
+					if (osName.contains("window")) {
+						cmd = "taskkill /F /FI \"IMAGENAME eq chromedriver*\"";
+					} else {
+						cmd = "pkill chromedriver";
+					}
+				} else if (driverInstanceName.contains("internetexplorer")) {
+					if (osName.contains("window")) {
+						cmd = "taskkill /F /FI \"IMAGENAME eq IEDriverServer*\"";
+					}
+				} else if (driverInstanceName.contains("firefox")) {
+					if (osName.contains("windows")) {
+						cmd = "taskkill /F /FI \"IMAGENAME eq geckodriver*\"";
+					} else {
+						cmd = "pkill geckodriver";
+					}
+				} else if (driverInstanceName.contains("edge")) {
+					if (osName.contains("window")) {
+						cmd = "taskkill /F /FI \"IMAGENAME eq msedgedriver*\"";
+					} else {
+						cmd = "pkill msedgedriver";
+					}
+				} else if (driverInstanceName.contains("opera")) {
+					if (osName.contains("window")) {
+						cmd = "taskkill /F /FI \"IMAGENAME eq operadriver*\"";
+					} else {
+						cmd = "pkill operadriver";
+					}
+				} else if (driverInstanceName.contains("safari")) {
+					if (osName.contains("mac")) {
+						cmd = "pkill safaridriver";
+					}
+				}
+
+				if (driver != null) {
+					driver.manage().deleteAllCookies();
+					driver.quit();
+				}
+			} catch (Exception e) {
+				log.info(e.getMessage());
+			} finally {
+				try {
+					Process process = Runtime.getRuntime().exec(cmd);
+					process.waitFor();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

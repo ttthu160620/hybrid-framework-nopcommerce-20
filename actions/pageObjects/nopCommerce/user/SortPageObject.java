@@ -28,11 +28,16 @@ public class SortPageObject extends BasePage{
 		return getFirstItemIsSelectedDropdown(driver, SortPageUI.DYNAMIC_DROPDOWN_BY_ID, dropdownID);
 	}
 	
+	public List<WebElement> getProductsNameList (){
+		List<WebElement> listProducts = getListWebElements(driver, SortPageUI.PRODUCT_NAME);
+		return listProducts;
+	}
+	
 	public boolean isProductNameAscensding() {
 		isLoadPageSuccess(driver);
 		//array chua list product da sort a-z in UI
 		ArrayList<String> listProductsUI = new ArrayList<String>();
-		List<WebElement> listProducts = getListWebElements(driver, SortPageUI.PRODUCT_NAME);
+		List<WebElement> listProducts = getProductsNameList();
 		for(WebElement productName : listProducts) {
 			listProductsUI.add(productName.getText());
 			System.out.println("Product Name in UI:" + productName.getText());
@@ -56,7 +61,7 @@ public class SortPageObject extends BasePage{
 		isLoadPageSuccess(driver);
 		
 		ArrayList<String> listProductsUI = new ArrayList<String>();
-		List<WebElement> listProducts = getListWebElements(driver, SortPageUI.PRODUCT_NAME);
+		List<WebElement> listProducts = getProductsNameList();
 		for(WebElement productName : listProducts) {
 			listProductsUI.add(productName.getText());
 			System.out.println("Product Name in UI:" + productName.getText());
@@ -86,7 +91,7 @@ public class SortPageObject extends BasePage{
 		List<WebElement> listProducts = getListWebElements(driver, SortPageUI.PRODUCT_PRICE);
 		for(WebElement productPrice : listProducts) {
 			listProductsUI.add(Float.parseFloat(productPrice.getText().replace("$", "").replace(",", "")));
-			System.out.println("Product Name in UI:" + productPrice.getText());
+			System.out.println("Product Price in UI:" + Float.parseFloat(productPrice.getText().replace("$", "").replace(",", "")));
 		}
 		
 		ArrayList<Float> listSortProduct = new ArrayList<>();
@@ -97,7 +102,7 @@ public class SortPageObject extends BasePage{
 		Collections.sort(listSortProduct);
 		
 		for(Float productPrice : listSortProduct) {
-			System.out.println("Product Name is ascensding: " + productPrice);
+			System.out.println("Product Price is ascensding: " + productPrice);
 		}
 		return listProductsUI.equals(listSortProduct);
 	}
@@ -109,7 +114,7 @@ public class SortPageObject extends BasePage{
 		List<WebElement> listProducts = getListWebElements(driver, SortPageUI.PRODUCT_PRICE);
 		for(WebElement productName : listProducts) {
 			listProductsUI.add(Float.parseFloat(productName.getText().replace("$", "").replace(",", "")));
-			System.out.println("Product Name in UI:" + productName.getText());
+			System.out.println("Product Price in UI:" + Float.parseFloat(productName.getText().replace("$", "").replace(",", "")));
 		}
 		
 		ArrayList<Float> listSortProduct = new ArrayList<>();
@@ -128,5 +133,30 @@ public class SortPageObject extends BasePage{
 		}
 		
 		return listProductsUI.equals(listSortProduct);
+	}
+	
+	public boolean isNextPagingIconDisplayed() {
+		waitForElementVisible(driver, SortPageUI.NEXT_PAGING_ICON);
+		return isElementDisplayed(driver, SortPageUI.NEXT_PAGING_ICON);
+	}
+	
+	public boolean isPreviousPagingIconDisplayed() {
+		waitForElementVisible(driver, SortPageUI.PREVIOUS_PAGING_ICON);
+		return isElementDisplayed(driver, SortPageUI.PREVIOUS_PAGING_ICON);
+	}
+	
+	public void clickToNextPagingIcon() {
+		waitForClickable(driver, SortPageUI.NEXT_PAGING_ICON);
+		clickToElement(driver, SortPageUI.NEXT_PAGING_ICON);
+	}
+	
+	public void clickToPreviousPagingIcon() {
+		waitForClickable(driver, SortPageUI.PREVIOUS_PAGING_ICON);
+		clickToElement(driver, SortPageUI.PREVIOUS_PAGING_ICON);
+	}
+	
+	public boolean isPagingUndisplayed() {
+		waitForElementInVisible(driver, SortPageUI.NEXT_PAGING_ICON);
+		return isElementUndisplayed(driver, SortPageUI.NEXT_PAGING_ICON);
 	}
 }

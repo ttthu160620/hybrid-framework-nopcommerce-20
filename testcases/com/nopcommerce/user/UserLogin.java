@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -14,6 +15,7 @@ import pageObjects.nopCommerce.user.LoginPageObjects;
 import pageObjects.nopCommerce.user.PageGeneratorManager;
 import pageObjects.nopCommerce.user.RegisterPageObjects;
 import utilities.DataHelperFaker;
+import utilities.ServerName;
 
 public class UserLogin extends BaseTest{
 	WebDriver driver;
@@ -21,17 +23,18 @@ public class UserLogin extends BaseTest{
 	RegisterPageObjects registerPage;
 	LoginPageObjects loginPage;
 	DataHelperFaker dataFaker;
-	utilities.Environment environment;
+	ServerName server;
 	String firstName, lastName, email, password, invalidEmail, unregisterEmail, invalidPassword;
 	String emailTextboxID, passwordTextboxID, loginButonText;
 	
-	@Parameters({"browser", "environment"})
+	@Parameters({"browser", "serverName", "envName", "ipAddress", "portNumber", "osName", "osVersion"})
 	@BeforeClass
-	public void beforeClass(String browserName, String environmentName) {
+	public void beforeClass(@Optional("chrome ")String browserName, @Optional("testing") String serverName, @Optional("local") String envName,
+			@Optional("localhost") String ipAddress,@Optional("4444") String portNumber, @Optional("Windows") String osName,@Optional("11") String osVersion) {
 		log.info("Pre-Condition 01: Open Home page");
-		ConfigFactory.setProperty("environment", environmentName);
-		environment = ConfigFactory.create(utilities.Environment.class);
-		driver = getBrowserDriver(browserName, environment.appUrl());
+		ConfigFactory.setProperty("serverName", serverName);
+		server = ConfigFactory.create(ServerName.class);
+		driver = getBrowserDriver(browserName, server.appUrl(), envName, ipAddress, portNumber, osName, osVersion);
 		homePage = PageGeneratorManager.getHomePage(driver);
 		
 		emailTextboxID = "Email";

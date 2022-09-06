@@ -69,26 +69,6 @@ public class BasePage {
 		  }
 	}
 	
-	public void overrideImplicitTimeOut(WebDriver driver, long timeout) {
-		driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
-	}
-	
-	public boolean isElementUndisplayed(WebDriver driver, String locator) {
-		overrideImplicitTimeOut(driver, sortTimeout);
-		List<WebElement> listElement= getListWebElements(driver, locator);
-		overrideImplicitTimeOut(driver, longTimeout);
-		if(listElement.size()==0) {
-			System.out.println("Element not in DOM");
-			return true;
-		}else if(listElement.size()>0 && !listElement.get(0).isDisplayed()) {
-			System.out.println("Element in DOM but undisplay");
-			return true;
-		}else {
-			System.out.println("Element in DOM and display");
-			return false;
-		}
-	}
-	
 	public Alert waitForAlertPresence(WebDriver driver) {
 		WebDriverWait explicitWait = new WebDriverWait(driver, 30);
 		return explicitWait.until(ExpectedConditions.alertIsPresent());
@@ -331,6 +311,42 @@ public class BasePage {
 		return getWebElement(driver, locatorType).isDisplayed();
 	}
 	
+	public void overrideImplicitTimeOut(WebDriver driver, long timeout) {
+		driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+	}
+	
+	public boolean isElementUndisplayed(WebDriver driver, String locatorType) {
+		overrideImplicitTimeOut(driver, sortTimeout);
+		List<WebElement> listElement= getListWebElements(driver, locatorType);
+		overrideImplicitTimeOut(driver, longTimeout);
+		if(listElement.size() == 0) {
+			System.out.println("Element not in DOM");
+			return true;
+		}else if(listElement.size() > 0 && !listElement.get(0).isDisplayed()) {
+			System.out.println("Element in DOM but undisplay");
+			return true;
+		}else {
+			System.out.println("Element in DOM and display");
+			return false;
+		}
+	}
+	
+	public boolean isElementUndisplayed(WebDriver driver, String locatorType, String... dynamicLocator) {
+		overrideImplicitTimeOut(driver, sortTimeout);
+		List<WebElement> listElement= getListWebElements(driver, getDynamicXpath(locatorType, dynamicLocator));
+		overrideImplicitTimeOut(driver, longTimeout);
+		if(listElement.size()==0) {
+			System.out.println("Element not in DOM");
+			return true;
+		}else if(listElement.size()>0 && !listElement.get(0).isDisplayed()) {
+			System.out.println("Element in DOM but undisplay");
+			return true;
+		}else {
+			System.out.println("Element in DOM and display");
+			return false;
+		}
+	}
+	
 	public boolean isElementDisplayed(WebDriver driver, String locatorType, String... dynamicLocator) {
 		return getWebElement(driver, getDynamicXpath(locatorType, dynamicLocator)).isDisplayed();
 	}
@@ -496,13 +512,17 @@ public class BasePage {
 	}
 	
 	public void waitForElementInVisible(WebDriver driver, String locatorType) {
-		WebDriverWait explicitWait = new WebDriverWait(driver, longTimeout);
+		WebDriverWait explicitWait = new WebDriverWait(driver, sortTimeout);
+		overrideImplicitTimeOut(driver, sortTimeout);
 		explicitWait.until(ExpectedConditions.invisibilityOfElementLocated(getByLocator(locatorType)));
+		overrideImplicitTimeOut(driver, longTimeout);
 	}
 	
 	public void waitForElementInVisible(WebDriver driver, String locatorType, String... dynamicLocator) {
-		WebDriverWait explicitWait = new WebDriverWait(driver, longTimeout);
+		WebDriverWait explicitWait = new WebDriverWait(driver, sortTimeout);
+		overrideImplicitTimeOut(driver, sortTimeout);
 		explicitWait.until(ExpectedConditions.invisibilityOfElementLocated(getByLocator(getDynamicXpath(locatorType, dynamicLocator))));
+		overrideImplicitTimeOut(driver, longTimeout);
 	}
 	
 	public void waitForAllElementsInVisible(WebDriver driver, String locatorType) {
@@ -635,5 +655,5 @@ public class BasePage {
 		selectItemInDefaultDropdown(driver, BasePageUI.DYNAMIC_DROPDOWN_BY_ID, textItem, dropdownID);
 	}
 	private long longTimeout = 30;
-	private long sortTimeout = 10;
+	private long sortTimeout = 5;
 }

@@ -1,4 +1,4 @@
-package com.nopcommerce.user;
+package com.nopcommerce.practice;
 
 import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
@@ -14,17 +14,17 @@ import pageObjects.nopCommerce.user.PageGeneratorManager;
 import pageObjects.nopCommerce.user.SearchPageObject;
 import utilities.ServerName;
 
-public class UserSearch extends BaseTest{
+public class Level_14_Selenium_Grid extends BaseTest{
 	WebDriver driver;
 	HomePageObject homePage;
 	SearchPageObject searchPage;
 	ServerName server;
 	String notExistData, relateProduct, absoluteProduct, advancedProduct, searchTextboxID, searchButtonText;
 	
-	@Parameters({"browser", "serverName", "envName"})
+	@Parameters({"browser", "serverName", "envName", "ipAddress", "portNumber", "osName", "osVersion"})
 	@BeforeClass
-	public void beforeClass(@Optional("chrome ")String browserName, @Optional("testing") String serverName, @Optional("local") String envName, @Optional("localhost") String ipAddress,@Optional("4444") String portNumber,
-			@Optional("Windows") String osName,@Optional("11") String osVersion) {
+	public void beforeClass(@Optional("chrome ")String browserName, @Optional("testing") String serverName, @Optional("local") String envName,
+			@Optional("localhost") String ipAddress,@Optional("4444") String portNumber, @Optional("Windows") String osName,@Optional("11") String osVersion) {
 		log.info("Pre-Condition 01: Open Home page");
 		ConfigFactory.setProperty("serverName", serverName);
 		server = ConfigFactory.create(ServerName.class);

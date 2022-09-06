@@ -4,6 +4,7 @@ import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -17,6 +18,7 @@ import pageObjects.nopCommerce.user.MyProductReviewPageObject;
 import pageObjects.nopCommerce.user.PageGeneratorManager;
 import pageObjects.nopCommerce.user.RegisterPageObjects;
 import utilities.DataHelperFaker;
+import utilities.ServerName;
 
 public class UserMyAccount extends BaseTest{
 	WebDriver driver;
@@ -28,20 +30,21 @@ public class UserMyAccount extends BaseTest{
 	ChangePasswordPageObject changePasswordPage;
 	MyProductReviewPageObject productReviewPage;
 	DataHelperFaker dataFaker;
-	utilities.Environment environment;
+	ServerName server;
 	String email, firstName, lastName, password, newPassword;
 	String firstNameID, lastNameID, emailID, passwordID, confirmPasswordID, companyID;
 	String editFirstName, editLastName, editEmail, editCompany, dayOfBirth, monthOfBirth, yearOfBirth, attributeName;
 	String country, state, city, address1, phoneNumber, zipCode;
 	String productReview, reviewTitle, reviewText;
 	
-	@Parameters({"browser", "environment"})
+	@Parameters({"browser", "serverName", "envName", "ipAddress", "portNumber", "osName", "osVersion"})
 	@BeforeClass
-	public void beforeClass(String browserName, String environmentName) {
+	public void beforeClass(@Optional("chrome ")String browserName, @Optional("testing") String serverName, @Optional("local") String envName,
+			@Optional("localhost") String ipAddress,@Optional("4444") String portNumber, @Optional("Windows") String osName,@Optional("11") String osVersion) {
 		log.info("Pre-Condition 01: Open Home page");
-		ConfigFactory.setProperty("environment", environmentName);
-		environment = ConfigFactory.create(utilities.Environment.class);
-		driver = getBrowserDriver(browserName, environment.appUrl());
+		ConfigFactory.setProperty("serverName", serverName);
+		server = ConfigFactory.create(ServerName.class);
+		driver = getBrowserDriver(browserName, server.appUrl(), envName, ipAddress, portNumber, osName, osVersion);
 		homePage = PageGeneratorManager.getHomePage(driver);
 		
 		log.info("Pre-Condition 02: Register successfuly");

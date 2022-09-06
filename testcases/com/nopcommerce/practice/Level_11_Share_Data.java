@@ -25,7 +25,6 @@ public class Level_11_Share_Data extends BaseTest{
   String projectPath = System.getProperty("user.dir");
   private HomePageObject homePage;
   private LoginPageObjects loginPage;
-  private RegisterPageObjects registerPage;
   String firstName, lastName, password, existingEmail;
   
   @Parameters("browser")
@@ -64,15 +63,4 @@ public class Level_11_Share_Data extends BaseTest{
   public void Search_04_Search_With_Absolute_Data() {
 	  
   }
-
-  @AfterClass
-  public void afterClass() {
-	  closeBrowserAndDriver();
-  }
-  
-  public int getRandomNumber() {
-	  Random random = new Random();
-	  return  random.nextInt(999);
-  }
-
 }
