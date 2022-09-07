@@ -17,10 +17,11 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 
-import factoryGrid.BrowserStackFactory;
-import factoryGrid.GridLocalFactory;
-import factoryGrid.LocalFactory;
-import factoryGrid.SaucelapFactory;
+import factoryBrowser.BrowserList;
+import factoryEnvironment.BrowserStackFactory;
+import factoryEnvironment.GridLocalFactory;
+import factoryEnvironment.LocalFactory;
+import factoryEnvironment.SaucelapFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseTest {
@@ -73,7 +74,7 @@ public class BaseTest {
 			driver = new LocalFactory(browserName).createDriver();
 			break;
 		}
-		case "gridLocal": {
+		case "grid": {
 			driver = new GridLocalFactory(browserName, ipAddress, portNumber).createDriver();
 			break;			
 		}
@@ -176,7 +177,7 @@ public class BaseTest {
 	}
 	
 	protected void closeBrowserAndDriver(String envName) {
-		if(envName.equals("local") || envName.equals("gridLocal")){
+		if(envName.equals("local") || envName.equals("grid")){
 			String cmd = "";
 			try {
 				String osName = System.getProperty("os.name").toLowerCase();

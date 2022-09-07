@@ -1,4 +1,4 @@
-package factoryGrid;
+package factoryEnvironment;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,10 +10,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import commons.BrowserList;
+import factoryBrowser.BrowserList;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class GridLocalFactory {
@@ -28,6 +29,7 @@ public class GridLocalFactory {
 		this.portNumber = portNumber;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public WebDriver createDriver() {
 		BrowserList browser = BrowserList.valueOf(browserName.toUpperCase());
 		DesiredCapabilities capality = null;
@@ -36,7 +38,7 @@ public class GridLocalFactory {
 			WebDriverManager.firefoxdriver().setup();
 			capality = DesiredCapabilities.firefox();
 			capality.setBrowserName("firefox");
-			capality.setPlatform(Platform.WINDOWS);
+			capality.setPlatform(Platform.ANY);
 			FirefoxOptions options = new FirefoxOptions();
 			options.merge(capality);
 		} 
@@ -44,7 +46,7 @@ public class GridLocalFactory {
 			WebDriverManager.chromedriver().setup();
 			capality = DesiredCapabilities.chrome();
 			capality.setBrowserName("chrome");
-			capality.setPlatform(Platform.WINDOWS);
+			capality.setPlatform(Platform.ANY);
 			ChromeOptions options = new ChromeOptions();
 			options.merge(capality);
 		}
@@ -69,14 +71,20 @@ public class GridLocalFactory {
 			driver = new ChromeDriver();
 		}
 		else if(browser == BrowserList.OPERA) {
-			WebDriverManager.operadriver();
-			driver = new OperaDriver();
+//			WebDriverManager.operadriver();
+//			driver = new OperaDriver();
+			WebDriverManager.operadriver().setup();
+			capality = DesiredCapabilities.opera();
+			capality.setBrowserName("opera");
+			capality.setPlatform(Platform.ANY);
+			OperaOptions options = new OperaOptions();
+			options.merge(capality);
 		} else {
 			throw new RuntimeException("Please input valid browser name value");
 		}
 		
 		try {
-			driver = new RemoteWebDriver(new URL(String.format("http://%s/wd/hub", ipAddress, portNumber)), capality);
+			driver = new RemoteWebDriver(new URL(String.format("http://%s:%s/wd/hub", ipAddress, portNumber)), capality);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

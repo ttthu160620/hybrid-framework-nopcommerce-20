@@ -11,13 +11,13 @@ import org.testng.annotations.Test;
 import commons.BaseTest;
 import pageObjects.nopCommerce.user.HomePageObject;
 import pageObjects.nopCommerce.user.PageGeneratorManager;
-import pageObjects.nopCommerce.user.SortPageObject;
+import pageObjects.nopCommerce.user.ProductPageObject;
 import utilities.ServerName;
 
 public class UserSort extends BaseTest{
 	WebDriver driver;
 	HomePageObject homePage;
-	SortPageObject sortPage;
+	ProductPageObject productPage;
 	ServerName server;
 	String sortByDropdownID, displayedDropdownID;
 	
@@ -25,6 +25,7 @@ public class UserSort extends BaseTest{
 	@BeforeClass
 	public void beforeClass(@Optional("chrome ")String browserName, @Optional("testing") String serverName, @Optional("local") String envName,
 			@Optional("localhost") String ipAddress,@Optional("4444") String portNumber, @Optional("Windows") String osName,@Optional("11") String osVersion) {
+		
 		log.info("Pre-Condition 01: Open Home page");
 		ConfigFactory.setProperty("serverName", serverName);
 		server = ConfigFactory.create(ServerName.class);
@@ -39,101 +40,101 @@ public class UserSort extends BaseTest{
 		homePage.hoverToMenuHeaderByText("Computers ");
 		
 		log.info("Pre-Condition 02 - Step 02: Click to 'Notebooks' link");
-		sortPage = homePage.clickToSubMenuByText("Computers ", "Notebooks ");
+		productPage = homePage.clickToSubMenuByText("Computers ", "Notebooks ");
 	}
 	
 	@Test
 	public void Sort_Notebooks_01_Name_A_To_Z() {
 		log.info("Sort_Notebooks_01_Name_A_To_Z - Step 01: Select 'Name: A to Z' in Sort by dropdown");
-		sortPage.selectDropdownByID(driver, sortByDropdownID, "Name: A to Z");
+		productPage.selectDropdownByID(driver, sortByDropdownID, "Name: A to Z");
 		
 		log.info("Sort_Notebooks_01_Name_A_To_Z - Step 02: Verify 'Name: A to Z' is selected.");
-		Assert.assertEquals(sortPage.getFirstSelectedInDropwdownByID(sortByDropdownID), "Name: A to Z");
+		Assert.assertEquals(productPage.getFirstSelectedInDropwdownByID(sortByDropdownID), "Name: A to Z");
 		
 		log.info("Sort_Notebooks_01_Name_A_To_Z - Step 02: Verify all products display ascensding");
-		Assert.assertTrue(sortPage.isProductNameAscensding());
+		Assert.assertTrue(productPage.isProductNameAscensding());
 	}
 	
 	@Test
 	public void Sort_Notebooks_02_Name_Z_To_A() {
 		log.info("Sort_Notebooks_02_Name_Z_To_A - Step 01: Select 'Name: Z to A' in Sort by dropdown");
-		sortPage.selectDropdownByID(driver, sortByDropdownID, "Name: Z to A");
+		productPage.selectDropdownByID(driver, sortByDropdownID, "Name: Z to A");
 		
 		log.info("Sort_Notebooks_02_Name_Z_To_A - Step 02: Verify 'Name: Z to A' is selected.");
-		Assert.assertEquals(sortPage.getFirstSelectedInDropwdownByID(sortByDropdownID), "Name: Z to A");
+		Assert.assertEquals(productPage.getFirstSelectedInDropwdownByID(sortByDropdownID), "Name: Z to A");
 		
 		log.info("Sort_Notebooks_02_Name_Z_To_A - Step 02: Verify all products display descensding");
-		Assert.assertTrue(sortPage.isProductNameDescensding());
+		Assert.assertTrue(productPage.isProductNameDescensding());
 	}
 	
 	@Test
 	public void Sort_Notebooks_03_Price_Low_to_High() {
 		log.info("Sort_Notebooks_03_Price_Low_to_High - Step 01: Select 'Price: Low to High' in Sort by dropdown");
-		sortPage.selectDropdownByID(driver, sortByDropdownID, "Price: Low to High");
+		productPage.selectDropdownByID(driver, sortByDropdownID, "Price: Low to High");
 		
 		log.info("Sort_Notebooks_03_Price_Low_to_High - Step 02: Verify 'Price: Low to High' is selected.");
-		Assert.assertEquals(sortPage.getFirstSelectedInDropwdownByID(sortByDropdownID), "Price: Low to High");
+		Assert.assertEquals(productPage.getFirstSelectedInDropwdownByID(sortByDropdownID), "Price: Low to High");
 		
 		log.info("Sort_Notebooks_03_Price_Low_to_High - Step 03: Verify all products display ascensding");
-		Assert.assertTrue(sortPage.isProductPriceAscensding());
+		Assert.assertTrue(productPage.isProductPriceAscensding());
 	}
 	
 	@Test
 	public void Sort_Notebooks_04_Price_High_To_Low() {
 		log.info("Sort_Notebooks_04_Price_High_To_Low - Step 01: Select 'Price: High to Low' in Sort by dropdown");
-		sortPage.selectDropdownByID(driver, sortByDropdownID, "Price: High to Low");
+		productPage.selectDropdownByID(driver, sortByDropdownID, "Price: High to Low");
 		
 		log.info("Sort_Notebooks_04_Price_High_To_Low - Step 02: Verify 'Price: High to Low' is selected.");
-		Assert.assertEquals(sortPage.getFirstSelectedInDropwdownByID(sortByDropdownID), "Price: High to Low");
+		Assert.assertEquals(productPage.getFirstSelectedInDropwdownByID(sortByDropdownID), "Price: High to Low");
 		
 		log.info("Sort_Notebooks_04_Price_High_To_Low - Step 03: Verify all products display descensding");
-		Assert.assertTrue(sortPage.isProductPriceDescensding());
+		Assert.assertTrue(productPage.isProductPriceDescensding());
 	}
 	
 	@Test
 	public void Displayed_01_3_Products_Page() {
 		log.info("Displayed_01_3_Products_Page - Step 01: Select '3' in Display dropdown");
-		sortPage.selectInDropdownByID(displayedDropdownID, "3");
+		productPage.selectInDropdownByID(displayedDropdownID, "3");
 		
 		log.info("Displayed_01_3_Products_Page - Step 02: Verify displayed 3 products in page 1");
-		sortPage.isLoadPageSuccess(driver);
-		Assert.assertEquals(sortPage.getProductsNameList().size(), 3);
+		productPage.isLoadPageSuccess(driver);
+		Assert.assertEquals(productPage.getProductsNameList().size(), 3);
 		
 		log.info("Displayed_01_3_Products_Page - Step 03: Verify displayed 'Next page' icon in page 1");
-		Assert.assertTrue(sortPage.isNextPagingIconDisplayed());
+		Assert.assertTrue(productPage.isNextPagingIconDisplayed());
 		
 		log.info("Displayed_01_3_Products_Page - Step 04: Click to 'Next page' icon in page 1");
-		sortPage.clickToNextPagingIcon();
+		productPage.clickToNextPagingIcon();
 		
 		log.info("Displayed_01_3_Products_Page - Step 05: Verify displayed 3 products in page 2");
-		sortPage.isLoadPageSuccess(driver);
-		Assert.assertEquals(sortPage.getProductsNameList().size(), 3);
+		productPage.isLoadPageSuccess(driver);
+		Assert.assertEquals(productPage.getProductsNameList().size(), 3);
 		
 		log.info("Displayed_01_3_Products_Page - Step 06: Verify displayed 'Previous page' icon in page 2");
-		Assert.assertTrue(sortPage.isPreviousPagingIconDisplayed());;
+		Assert.assertTrue(productPage.isPreviousPagingIconDisplayed());;
 	}
 	
 	@Test
 	public void Displayed_02_6_Products_Page() {
 		log.info("Displayed_02_6_Products_Page - Step 01: Select '6' in Display dropdown");
-		sortPage.selectInDropdownByID(displayedDropdownID, "6");
+		productPage.selectInDropdownByID(displayedDropdownID, "6");
 		
 		log.info("Displayed_02_6_Products_Page - Step 02: Verify displayed <= 6 products/page");
-		Assert.assertTrue(sortPage.getProductsNameList().size() <= 6);
+		Assert.assertTrue(productPage.getProductsNameList().size() <= 6);
 		
 		log.info("Displayed_02_6_Products_Page - Step 03: Verify Paging is not dispalyed"); 
-		Assert.assertTrue(sortPage.isPagingUndisplayed());
+		Assert.assertTrue(productPage.isPagingUndisplayed());
 	}
 	
 	@Test
 	public void Displayed_03_9_Products_Page() {
 		log.info("Displayed_03_9_Products_Page - Step 01: Select '9' in Display dropdown");
-		sortPage.selectInDropdownByID(displayedDropdownID, "9");
+		productPage.selectInDropdownByID(displayedDropdownID, "9");
 		
 		log.info("Displayed_03_9_Products_Page - Step 02: Verify displayed <=9 products/page");
-		Assert.assertTrue(sortPage.getProductsNameList().size() <= 9);
+		Assert.assertTrue(productPage.getProductsNameList().size() <= 9);
 		
 		log.info("Displayed_03_9_Products_Page - Step 03: Verify Paging is not dispalyed"); 
-		Assert.assertTrue(sortPage.isPagingUndisplayed());
+		Assert.assertTrue(productPage.isPagingUndisplayed());
 	}
 }
