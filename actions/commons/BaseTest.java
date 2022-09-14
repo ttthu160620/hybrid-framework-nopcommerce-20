@@ -62,7 +62,7 @@ public class BaseTest {
 			throw new RuntimeException("Browser name invalid");
 		}
 
-		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		driver.get("https://demo.nopcommerce.com/");
 		return driver;
@@ -242,6 +242,15 @@ public class BaseTest {
 	protected int getRandomNumber() {
 		Random ran = new Random();
 		return ran.nextInt(999);
+	}
+	
+	protected void sleepInSecond (long second) {
+		try {
+			Thread.sleep( second * 1000);
+		}
+		catch(InterruptedException e){
+			e.printStackTrace();
+		}
 	}
 }
 

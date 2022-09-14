@@ -71,8 +71,6 @@ public class GridLocalFactory {
 			driver = new ChromeDriver();
 		}
 		else if(browser == BrowserList.OPERA) {
-//			WebDriverManager.operadriver();
-//			driver = new OperaDriver();
 			WebDriverManager.operadriver().setup();
 			capality = DesiredCapabilities.opera();
 			capality.setBrowserName("opera");

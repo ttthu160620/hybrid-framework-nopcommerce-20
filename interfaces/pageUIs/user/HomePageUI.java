@@ -9,5 +9,6 @@ public class HomePageUI {
 	public static final String DYNAMIC_HEADER_MENU_BY_TEXT = "xpath=//div[@class='header-menu']//a[text()='%s']";
 	public static final String DYNAMIC_SUB_MENU_BY_TEXT = "xpath=//ul[contains(@class,'notmobile')]//a[text()='%s']/following-sibling::ul[@class='sublist first-level']//a[text()='%s']";
 	public static final String WISHLIST_LINK = "xpath=//a[@class='ico-wishlist']";
+	public static final String SHOPPING_CART_LINK = "xpath=//a[@class='ico-cart']";
 	
 }

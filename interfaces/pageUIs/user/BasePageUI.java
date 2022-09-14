@@ -11,6 +11,7 @@ public class BasePageUI {
 	public static final String USER_LOGOUT_LINK ="xpath=//a[@class='ico-logout']";
 	
 	public static final String DYNAMIC_LINK_MY_ACCOUNT_AREA = "xpath=//div[@class='block block-account-navigation']//a[text()='%s']";
+	public static final String DYNAMIC_LINK_FOOTER = "xpath=//div[@class='footer']//a[text()='%s']";
 	public static final String UPLOAD_FILE = "xpath=//input[@type='file']";
 	
 	public static final String DYNAMIC_TEXTBOX_BY_ID = "xpath=//input[@id='%s']";

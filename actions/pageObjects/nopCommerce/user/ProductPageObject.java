@@ -159,4 +159,25 @@ public class ProductPageObject extends BasePage{
 		waitForElementInVisible(driver, ProductPageUI.NEXT_PAGING_ICON);
 		return isElementUndisplayed(driver, ProductPageUI.NEXT_PAGING_ICON);
 	}
+	
+	public void clickToButtonInProductDetailByClassName(String buttonClass) {
+		waitForClickable(driver,ProductPageUI.DYNAMIC_BUTTON_PRODUCT_DETAIL_BY_CLASS, buttonClass);
+		clickToElement(driver,ProductPageUI.DYNAMIC_BUTTON_PRODUCT_DETAIL_BY_CLASS, buttonClass);
+	}
+	
+	public String getSuccessfulMessageInBarNotification() {
+		waitForElementVisible(driver, ProductPageUI.SUCCESS_MESSAGE_BAR_NOTIFICATION);
+		return getElementText(driver, ProductPageUI.SUCCESS_MESSAGE_BAR_NOTIFICATION);
+	}
+	
+	public void clickToCloseBarNotificationIcon() {
+		waitForClickable(driver, ProductPageUI.CLOSE_MESSAGE_ICON);
+		clickToElement(driver, ProductPageUI.CLOSE_MESSAGE_ICON);
+	}
+	
+	public CartPageObject clickToAddToCartButton() {
+		waitForClickable(driver, ProductPageUI.ADD_TO_CART_BUTTON_IN_DETAIL);
+		clickToElement(driver, ProductPageUI.ADD_TO_CART_BUTTON_IN_DETAIL);
+		return PageGeneratorManager.getCartPageObject(driver);
+	}
 }

@@ -41,9 +41,10 @@ public class HomePageObject extends BasePage{
 		return PageGeneratorManager.getHomePage(driver);
 	}
 	
-	public void clickToProductLinkInFeatureByText(String productText) {
+	public ProductPageObject clickToProductLinkInFeatureByText(String productText) {
 		waitForClickable(driver, HomePageUI.DYNAMIC_PRODUCT_LINK_IN_FEATURE_BY_TEXT, productText);
 		clickToElement(driver, HomePageUI.DYNAMIC_PRODUCT_LINK_IN_FEATURE_BY_TEXT, productText);
+		return PageGeneratorManager.getProductPage(driver);
 	}
 	
 	public void hoverToMenuHeaderByText(String categoryName) {
@@ -54,6 +55,18 @@ public class HomePageObject extends BasePage{
 	public ProductPageObject clickToSubMenuByText(String menuName, String subName) {
 		waitForClickable(driver, HomePageUI.DYNAMIC_SUB_MENU_BY_TEXT, menuName, subName);
 		clickToElement(driver, HomePageUI.DYNAMIC_SUB_MENU_BY_TEXT, menuName, subName);
-		return PageGeneratorManager.getSortPage(driver);
+		return PageGeneratorManager.getProductPage(driver);
+	}
+	
+	public WishlistPageObjects clickToWishlistLink() {
+		waitForClickable(driver, HomePageUI.WISHLIST_LINK);
+		clickToElement(driver, HomePageUI.WISHLIST_LINK);
+		return PageGeneratorManager.getWishlistPage(driver);
+	}
+	
+	public CartPageObject clickToShoppingCartLink() {
+		waitForClickable(driver, HomePageUI.SHOPPING_CART_LINK);
+		clickToElement(driver, HomePageUI.SHOPPING_CART_LINK);
+		return PageGeneratorManager.getCartPageObject(driver);
 	}
 }

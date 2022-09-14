@@ -158,6 +158,20 @@ public class BasePage {
 		return driver.findElements(getByLocator(locatorType));
 	}
 	
+	public List<WebElement> getListWebElements(WebDriver driver, String locatorType, String... dynamicLocator) {
+		return driver.findElements(getByLocator(getDynamicXpath(locatorType, dynamicLocator)));
+	}
+	
+	public int getListElementSize(WebDriver driver, String locatorType) {
+		List<WebElement> listElement = getListWebElements( driver, locatorType);
+		return listElement.size();
+	}
+	
+	public int getListElementSize(WebDriver driver, String locatorType, String dynamicLocator) {
+		List<WebElement> listElement = getListWebElements( driver, locatorType, dynamicLocator);
+		return listElement.size();
+	}
+	
 	private String getDynamicXpath(String locatorType, String... values) {
 		if(locatorType.startsWith("xpath=") || locatorType.startsWith("Xpath=") ||locatorType.startsWith("XPATH=")) {
 			locatorType = String.format(locatorType, (Object[]) values);
@@ -403,6 +417,11 @@ public class BasePage {
 		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 		jsExecutor.executeScript("arguments[0].click();", getWebElement(driver, locator));
 	}
+	
+	public void clickToElementByJS(WebDriver driver, String locatorType, String... dynamicLocator) {
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+		jsExecutor.executeScript("arguments[0].click();", getWebElement(driver, getDynamicXpath(locatorType, dynamicLocator)));
+	}
 
 	public void scrollToElementOnTop(WebDriver driver, String locator) {
 		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
@@ -633,6 +652,11 @@ public class BasePage {
 	public void openDynamicMorePage(WebDriver driver, String... pageName) {
 		waitForClickable(driver, BasePageUI.DYNAMIC_LINK_MY_ACCOUNT_AREA, pageName);
 		clickToElement(driver, BasePageUI.DYNAMIC_LINK_MY_ACCOUNT_AREA, pageName);
+	}
+	
+	public void openDynamicMorePageFooterByText(WebDriver driver, String... pageName) {
+		waitForClickable(driver, BasePageUI.DYNAMIC_LINK_FOOTER, pageName);
+		clickToElement(driver, BasePageUI.DYNAMIC_LINK_FOOTER, pageName);
 	}
 	
 	public void inputTextboxByID(WebDriver driver, String textboxID, String value) {
